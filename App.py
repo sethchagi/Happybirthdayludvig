@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 
 # 1. Page Config
 st.set_page_config(page_title="Happy Birthday Ludvig!", page_icon="🎉", layout="centered")
@@ -21,7 +22,7 @@ slides = [
     },
     {
         "text": "He is someone you can depend on. A person who will be there for you through tough times, be patient with you, and listen to you. Or maybe just to me (haha).",
-        "img": "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2Q1bXZtZDN5M2ZzeHl6bXZzZ3M0NXJ6dDczeDRqYmJxbzZ1YnZ2biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/J0wePT3A0O1HCH901I/giphy.webp"
+        "img": "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2Q1bXZtZDN5M2ZzeHl6bXZzZ3M0NXJ6dDczeDRqYmJxbzZ1YnZ3biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/J0wePT3A0O1HCH901I/giphy.webp"
     },
     {
         "text": "He got annoyed pretty easily but he said having me around with him doesn’t annoy him as much (hehe). But this actually kinda another reason why we go well together bc I love being angry. He gets that anger and I don’t feel weird and alone when I am angry.",
@@ -148,9 +149,13 @@ if not st.session_state.entered:
         st.rerun()
 
 else:
-    # Audio Player (Visible so it actually works even if browsers block autoplay)
-    st.audio("jazz.mp3", format="audio/mpeg", autoplay=True)
-    st.caption("🎵 Click play if the jazz doesn't start automatically!")
+    # BULLETPROOF AUDIO PLAYER
+    # This checks if the file exists first. If it doesn't, it skips the audio so the app doesn't crash!
+    if os.path.exists("jazz.mp3"):
+        st.audio("jazz.mp3", format="audio/mpeg", autoplay=True)
+        st.caption("🎵 Click play if the jazz doesn't start automatically!")
+    else:
+        st.warning("⚠️ Heads up: Streamlit couldn't find 'jazz.mp3' in your GitHub. Check the spelling/capitalization! But the show must go on...")
     
     current_idx = st.session_state.slide_index
     
