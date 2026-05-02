@@ -1,20 +1,6 @@
 import streamlit as st
-import base64
-import os
 
-# --- Helper Function for Local Files ---
-# Streamlit blocks local files in custom HTML, so we convert them to raw data (Base64) first.
-def get_base64_file(file_path):
-    if os.path.exists(file_path):
-        with open(file_path, 'rb') as f:
-            data = f.read()
-        b64 = base64.b64encode(data).decode()
-        ext = file_path.split('.')[-1].lower()
-        mime_type = f"image/{ext}" if ext in ['png', 'jpg', 'jpeg', 'gif'] else "audio/mpeg"
-        return f"data:{mime_type};base64,{b64}"
-    return ""
-
-# 1. Page Configuration (Must be first)
+# 1. Page Config
 st.set_page_config(page_title="Happy Birthday Ludvig!", page_icon="🎉", layout="centered")
 
 # 2. State Management
@@ -23,44 +9,43 @@ if "entered" not in st.session_state:
 if "slide_index" not in st.session_state:
     st.session_state.slide_index = 0
 
-# 3. The Story Data 
-# IMPORTANT: Change the "img" file names to match EXACTLY what you uploaded to GitHub.
+# 3. The Story Data (Using direct web URLs so they NEVER break)
 slides = [
     {
         "text": "He is a 6 ft tall, funky, and dorky man with such glorious, blonde hairs.",
-        "img": "pokemon1.gif" 
+        "img": "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3E1c29kM3M3bWd6YWN4Z3B5dG9yZ3M0a3N6bHJqMmZyZmR6ZWU1NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/13GjU3w8TfS7U4/giphy.webp" 
     },
     {
         "text": "He is smart. But he is so much more, he is a bright student, driven, and disciplined.",
-        "img": "pokemon2.gif"
+        "img": "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExc2pxbnhyMndyMndwMHR5aHN6dTN0Z3p6bzNweW11MjQ5b2Y4Z3Y0ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/uBnnM9HktV5z0RkZgH/giphy.webp"
     },
     {
         "text": "He is someone you can depend on. A person who will be there for you through tough times, be patient with you, and listen to you. Or maybe just to me (haha).",
-        "img": "pokemon3.gif"
+        "img": "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2Q1bXZtZDN5M2ZzeHl6bXZzZ3M0NXJ6dDczeDRqYmJxbzZ1YnZ2biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/J0wePT3A0O1HCH901I/giphy.webp"
     },
     {
         "text": "He got annoyed pretty easily but he said having me around with him doesn’t annoy him as much (hehe). But this actually kinda another reason why we go well together bc I love being angry. He gets that anger and I don’t feel weird and alone when I am angry.",
-        "img": "pokemon4.gif"
+        "img": "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHJzY3R5M2M1NzJxdWV6NWV4cXZxcWN6ZWQxeGFwcjM5aHpydHZqMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKrEzvPNBgWEigM/giphy.webp"
     },
     {
         "text": "He is someone who sits with my mess and still talks to it in the softest way.",
-        "img": "pokemon5.gif"
+        "img": "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXZ6eXQxNjQydDN1ZDRxdHJrNThxdTZqZ3RpeHByM2txZXJmZXVvMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/vsyKKf1t22nmw/giphy.webp"
     },
     {
         "text": "I don’t really need AI for I have him when I am curious about some silly things.",
-        "img": "pokemon6.gif"
+        "img": "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExeXV5YXQ2enU5d3l6ZnIzbXd4ZWd0bW10eG8yMnB6ZXR5bWp2cndwMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/fVnv2w8kHxxq1yq7L8/giphy.webp"
     },
     {
         "text": "He is the “Well, actually…” guy and I don’t mind at all. He thought that’s annoying, but I can learn a ton from his “Well, actually..”",
-        "img": "pokemon7.gif"
+        "img": "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Z6Z3Q3N3B6NXU5MzF1MnhxZXZ0eWc4dTNteWV6N3B6cWl2eGFvNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/U2nN0ridM4lXy/giphy.webp"
     },
     {
         "text": "He is a person with the strongest will and the gentlest heart.",
-        "img": "pokemon8.gif"
+        "img": "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHZ2azV1aDNyeDV5ZHg4eHV3bnd6dnhwbXR6ZnJ5a3VwYm16em43bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W7N21x0xEMlC8/giphy.webp"
     },
     {
         "text": "Now that you have met him, please be kinder to him.",
-        "img": "" # No image needed for conclusion
+        "img": ""
     },
     {
         "text": "Please give him a little break and don’t let his head stuck in his ass.",
@@ -72,138 +57,129 @@ slides = [
     }
 ]
 
-# 4. Custom CSS Injection
+# 4. Super Funky Centered CSS
 css = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Quicksand:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Quicksand:wght@700&display=swap');
 
+/* Hide Streamlit clutter */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 header {visibility: hidden;}
 
-html, body, [class*="css"]  {
+/* Funky Polka Dot Background using his favorite colors */
+.stApp {
+    background-color: #fefae0;
+    background-image: radial-gradient(#bc6c25 3px, transparent 3px), radial-gradient(#bc6c25 3px, transparent 3px);
+    background-size: 60px 60px;
+    background-position: 0 0, 30px 30px;
+}
+
+/* Chunky, perfectly centered text boxes */
+.story-box {
+    background-color: #588157; /* Green */
+    color: #fefae0;
+    border: 5px solid #3a5a40; /* Darker Green */
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
     font-family: 'Quicksand', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    box-shadow: 10px 10px 0px #f4e04d; /* Yellow shadow */
+    margin: 20px auto;
+}
+
+.intro-title {
+    font-family: 'Caveat', cursive;
+    color: #bc6c25;
+    font-size: 60px;
+    text-align: center;
+    text-shadow: 3px 3px 0px #f4e04d;
+    margin-bottom: 20px;
+}
+
+.bday-title {
+    font-family: 'Caveat', cursive;
+    color: #fefae0;
+    font-size: 70px;
+    text-align: center;
+    margin-bottom: 0px;
+}
+
+/* Force Streamlit buttons to be perfectly centered */
+div.stButton {
+    display: flex;
+    justify-content: center;
 }
 
 div.stButton > button:first-child {
     background-color: #f4e04d;
     color: #3a5a40;
     font-family: 'Caveat', cursive;
-    font-size: 24px;
-    border: 3px solid #bc6c25;
+    font-size: 30px;
+    border: 4px solid #bc6c25;
     border-radius: 50px;
-    padding: 10px 40px;
-    box-shadow: 4px 4px 0px #3a5a40;
-    transition: all 0.3s ease;
-    display: block;
-    margin: 0 auto;
+    padding: 10px 50px;
+    box-shadow: 5px 5px 0px #3a5a40;
+    transition: all 0.2s ease;
 }
 
 div.stButton > button:first-child:hover {
-    transform: scale(1.05);
-    background-color: #588157;
+    transform: translateY(4px);
+    box-shadow: 1px 1px 0px #3a5a40;
+    background-color: #bc6c25;
     color: #fefae0;
-}
-
-.story-card {
-    background-color: rgba(254, 250, 224, 0.95);
-    border: 5px solid #bc6c25;
-    border-radius: 20px;
-    padding: 40px;
-    text-align: center;
-    box-shadow: 10px 10px 0px #3a5a40;
-    margin-top: 50px;
-    animation: fadeIn 1s ease-in;
-}
-
-.slide-text {
-    font-size: 24px;
-    color: #3a5a40;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-.poke-img {
-    max-width: 200px;
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); }
-    100% { transform: translateY(0px); }
 }
 </style>
 """
 st.markdown(css, unsafe_allow_html=True)
 
-# 5. Logic: Intro Screen vs Main World
+# 5. Logic
 if not st.session_state.entered:
-    st.markdown("<br><br><br><br><br><br>", unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("Enter"):
-            st.session_state.entered = True
-            st.rerun()
+    # Dead center spacing for the intro
+    st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
+    st.markdown("<div class='intro-title'>Ready to meet Ludvig?</div>", unsafe_allow_html=True)
+    if st.button("ENTER THE CHAOS"):
+        st.session_state.entered = True
+        st.rerun()
 
 else:
-    background_css = """
-    <style>
-    .stApp {
-        background: linear-gradient(135deg, rgba(88,129,87,0.8), rgba(244,224,77,0.6), rgba(188,108,37,0.7)), url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2070&auto=format&fit=crop');
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-    }
-    </style>
-    """
-    st.markdown(background_css, unsafe_allow_html=True)
+    # Audio Player (Visible so it actually works even if browsers block autoplay)
+    st.audio("jazz.mp3", format="audio/mpeg", autoplay=True)
+    st.caption("🎵 Click play if the jazz doesn't start automatically!")
     
-    # Process local audio file
-    audio_b64 = get_base64_file("jazz.mp3")
-    if audio_b64:
-        audio_html = f"""
-        <audio autoplay loop>
-            <source src="{audio_b64}" type="audio/mpeg">
-        </audio>
-        """
-        st.markdown(audio_html, unsafe_allow_html=True)
-
     current_idx = st.session_state.slide_index
     
     if current_idx < len(slides):
-        st.markdown('<div class="story-card">', unsafe_allow_html=True)
-        
-        if current_idx == 0:
-            st.markdown("<h1 style='font-family: Caveat, cursive; color: #bc6c25; font-size: 50px;'>Let's Meet Ludvig</h1>", unsafe_allow_html=True)
-            
         slide_data = slides[current_idx]
-        st.markdown(f'<p class="slide-text">{slide_data["text"]}</p>', unsafe_allow_html=True)
         
-        # Process local image file
+        # Text Box
+        st.markdown(f"<div class='story-box'>{slide_data['text']}</div>", unsafe_allow_html=True)
+        
+        # Perfectly Centered Image
         if slide_data["img"]:
-            img_b64 = get_base64_file(slide_data["img"])
-            if img_b64:
-                st.markdown(f'<img class="poke-img" src="{img_b64}" alt="pokemon">', unsafe_allow_html=True)
-            else:
-                st.warning(f"File '{slide_data['img']}' not found. Check your spelling or upload!")
-            
-        st.markdown('</div>', unsafe_allow_html=True)
-        st.markdown("<br>", unsafe_allow_html=True)
-        
-        col1, col2, col3 = st.columns([1, 1, 1])
-        with col2:
-            if st.button("Next"):
-                st.session_state.slide_index += 1
-                st.rerun()
+            col1, col2, col3 = st.columns([1, 2, 1])
+            with col2:
+                st.image(slide_data["img"], use_container_width=True)
                 
+        # Spacing
+        st.write("")
+        
+        # Next Button
+        if st.button("Next"):
+            st.session_state.slide_index += 1
+            st.rerun()
+            
     else:
-        st.markdown('<div class="story-card">', unsafe_allow_html=True)
-        st.markdown("<h1 style='font-family: Caveat, cursive; color: #bc6c25; font-size: 60px;'>HAPPY 26TH BIRTHDAY, LUDVIG!</h1>", unsafe_allow_html=True)
-        st.markdown("<p style='font-size: 40px; color: #3a5a40;'>I love you.</p>", unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        # Grand Finale
+        st.balloons() # Triggers Streamlit's built in balloon animation!
+        st.markdown("""
+        <div class='story-box' style='background-color: #bc6c25; border-color: #f4e04d; box-shadow: 10px 10px 0px #3a5a40;'>
+            <div class='bday-title'>HAPPY 26TH BIRTHDAY, LUDVIG!</div>
+            <p style='font-size: 35px; margin-top: 10px;'>I love you.</p>
+        </div>
+        """, unsafe_allow_html=True)
