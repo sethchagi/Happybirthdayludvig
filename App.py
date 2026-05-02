@@ -1,20 +1,13 @@
 import streamlit as st
-import os
 
 # 1. Page Config
-st.set_page_config(page_title="Happy Birthday Ludvig!", page_icon="🎉", layout="centered")
+st.set_page_config(page_title="Happy Birthday Lui!", page_icon="🎉", layout="centered")
 
-# 2. State Management
-if "entered" not in st.session_state:
-    st.session_state.entered = False
-if "slide_index" not in st.session_state:
-    st.session_state.slide_index = 0
-
-# 3. The Story Data (Using direct web URLs so they NEVER break)
-slides = [
+# 2. The Complete Story Data (Nothing missing!)
+story_blocks = [
     {
         "text": "He is a 6 ft tall, funky, and dorky man with such glorious, blonde hairs.",
-        "img": "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3E1c29kM3M3bWd6YWN4Z3B5dG9yZ3M0a3N6bHJqMmZyZmR6ZWU1NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/13GjU3w8TfS7U4/giphy.webp" 
+        "img": "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3E1c29kM3M3bWd6YWN4Z3B5dG9yZ3M0a3N6bHJqMmZyZmR6ZWU1NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/13GjU3w8TfS7U4/giphy.webp"
     },
     {
         "text": "He is smart. But he is so much more, he is a bright student, driven, and disciplined.",
@@ -43,148 +36,134 @@ slides = [
     {
         "text": "He is a person with the strongest will and the gentlest heart.",
         "img": "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHZ2azV1aDNyeDV5ZHg4eHV3bnd6dnhwbXR6ZnJ5a3VwYm16em43bSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W7N21x0xEMlC8/giphy.webp"
-    },
-    {
-        "text": "Now that you have met him, please be kinder to him.",
-        "img": ""
-    },
-    {
-        "text": "Please give him a little break and don’t let his head stuck in his ass.",
-        "img": ""
-    },
-    {
-        "text": "Please give him a little clap in each of his wins, big or small.",
-        "img": ""
     }
 ]
 
-# 4. Super Funky Centered CSS
+# 3. New Aesthetic CSS (Monét, Better Fonts, Readable Text)
 css = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Quicksand:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Boogaloo&family=Outfit:wght@400;700&display=swap');
 
 /* Hide Streamlit clutter */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 header {visibility: hidden;}
 
-/* Funky Polka Dot Background using his favorite colors */
+/* Monét Japanese Bridge Background with a dark overlay to make text pop */
 .stApp {
-    background-color: #fefae0;
-    background-image: radial-gradient(#bc6c25 3px, transparent 3px), radial-gradient(#bc6c25 3px, transparent 3px);
-    background-size: 60px 60px;
-    background-position: 0 0, 30px 30px;
+    background: linear-gradient(rgba(58, 90, 64, 0.85), rgba(88, 129, 87, 0.85)), 
+                url('https://upload.wikimedia.org/wikipedia/commons/3/33/Claude_Monet_-_Water_Lilies_and_Japanese_Bridge_-_1899.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
-/* Chunky, perfectly centered text boxes */
-.story-box {
-    background-color: #588157; /* Green */
-    color: #fefae0;
-    border: 5px solid #3a5a40; /* Darker Green */
-    border-radius: 20px;
+/* Beautiful, clean text boxes */
+.story-card {
+    background-color: rgba(254, 250, 224, 0.95); /* Soft yellow-white */
+    border-left: 8px solid #bc6c25; /* Brown accent line */
+    border-radius: 15px;
     padding: 30px;
-    text-align: center;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 26px;
-    font-weight: 700;
-    box-shadow: 10px 10px 0px #f4e04d; /* Yellow shadow */
-    margin: 20px auto;
+    margin-bottom: 40px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
 }
 
-.intro-title {
-    font-family: 'Caveat', cursive;
-    color: #bc6c25;
-    font-size: 60px;
+.story-text {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #3a5a40; /* Dark Green */
+    line-height: 1.6;
     text-align: center;
-    text-shadow: 3px 3px 0px #f4e04d;
-    margin-bottom: 20px;
+}
+
+/* Funky Headers */
+.main-title {
+    font-family: 'Boogaloo', cursive;
+    color: #f4e04d; /* Yellow */
+    font-size: 65px;
+    text-align: center;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+    margin-bottom: 40px;
+    margin-top: 20px;
 }
 
 .bday-title {
-    font-family: 'Caveat', cursive;
-    color: #fefae0;
+    font-family: 'Boogaloo', cursive;
+    color: #bc6c25;
     font-size: 70px;
     text-align: center;
-    margin-bottom: 0px;
+    line-height: 1.1;
 }
 
-/* Force Streamlit buttons to be perfectly centered */
-div.stButton {
-    display: flex;
-    justify-content: center;
-}
-
-div.stButton > button:first-child {
-    background-color: #f4e04d;
-    color: #3a5a40;
-    font-family: 'Caveat', cursive;
-    font-size: 30px;
-    border: 4px solid #bc6c25;
-    border-radius: 50px;
-    padding: 10px 50px;
-    box-shadow: 5px 5px 0px #3a5a40;
-    transition: all 0.2s ease;
-}
-
-div.stButton > button:first-child:hover {
-    transform: translateY(4px);
-    box-shadow: 1px 1px 0px #3a5a40;
-    background-color: #bc6c25;
-    color: #fefae0;
+/* Audio Player Styling */
+audio {
+    width: 100%;
+    margin-bottom: 30px;
+    border-radius: 10px;
 }
 </style>
 """
 st.markdown(css, unsafe_allow_html=True)
 
-# 5. Logic
-if not st.session_state.entered:
-    # Dead center spacing for the intro
-    st.write("")
-    st.write("")
-    st.write("")
-    st.write("")
-    st.markdown("<div class='intro-title'>Ready to meet Ludvig?</div>", unsafe_allow_html=True)
-    if st.button("ENTER THE CHAOS"):
-        st.session_state.entered = True
-        st.rerun()
+# 4. The Page Content
+st.markdown("<div class='main-title'>Let's Meet Lui...</div>", unsafe_allow_html=True)
 
-else:
-    # BULLETPROOF AUDIO PLAYER
-    # This checks if the file exists first. If it doesn't, it skips the audio so the app doesn't crash!
-    if os.path.exists("jazz.mp3"):
-        st.audio("jazz.mp3", format="audio/mpeg", autoplay=True)
-        st.caption("🎵 Click play if the jazz doesn't start automatically!")
-    else:
-        st.warning("⚠️ Heads up: Streamlit couldn't find 'jazz.mp3' in your GitHub. Check the spelling/capitalization! But the show must go on...")
+# Guaranteed Jazz Audio Player (Using a live web link so it never fails)
+st.markdown("""
+<audio autoplay controls>
+  <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=smooth-jazz-114705.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+""", unsafe_allow_html=True)
+st.caption("🎷 Press play for some Jazz!")
+st.write("---")
+
+# Render all the Pokemon/Story Blocks seamlessly
+for block in story_blocks:
+    st.markdown(f"""
+    <div class='story-card'>
+        <div class='story-text'>{block["text"]}</div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    current_idx = st.session_state.slide_index
-    
-    if current_idx < len(slides):
-        slide_data = slides[current_idx]
-        
-        # Text Box
-        st.markdown(f"<div class='story-box'>{slide_data['text']}</div>", unsafe_allow_html=True)
-        
-        # Perfectly Centered Image
-        if slide_data["img"]:
-            col1, col2, col3 = st.columns([1, 2, 1])
-            with col2:
-                st.image(slide_data["img"], use_container_width=True)
-                
-        # Spacing
-        st.write("")
-        
-        # Next Button
-        if st.button("Next"):
-            st.session_state.slide_index += 1
-            st.rerun()
-            
-    else:
-        # Grand Finale
-        st.balloons() # Triggers Streamlit's built in balloon animation!
-        st.markdown("""
-        <div class='story-box' style='background-color: #bc6c25; border-color: #f4e04d; box-shadow: 10px 10px 0px #3a5a40;'>
-            <div class='bday-title'>HAPPY 26TH BIRTHDAY, LUDVIG!</div>
-            <p style='font-size: 35px; margin-top: 10px;'>I love you.</p>
-        </div>
-        """, unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.image(block["img"], use_container_width=True)
+    st.write("<br>", unsafe_allow_html=True)
+
+st.write("---")
+
+# The Conclusion Messages
+st.markdown("""
+<div class='story-card' style='border-left: 8px solid #588157;'>
+    <div class='story-text'>Now that you have met him, please be kinder to him.</div>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<div class='story-card' style='border-left: 8px solid #588157;'>
+    <div class='story-text'>Please give him a little break and don’t let his head stuck in his ass.</div>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<div class='story-card' style='border-left: 8px solid #588157;'>
+    <div class='story-text'>Please give him a little clap in each of his wins, big or small.</div>
+</div>
+""", unsafe_allow_html=True)
+
+# The Grand Finale
+st.markdown("<br>", unsafe_allow_html=True)
+st.markdown("""
+<div class='story-card' style='background-color: #f4e04d; border-left: 8px solid #bc6c25; box-shadow: 0px 10px 20px rgba(0,0,0,0.5);'>
+    <div class='bday-title'>HAPPY 26TH BIRTHDAY, LUI!</div>
+    <div class='story-text' style='font-size: 35px; margin-top: 15px;'>I love you.</div>
+</div>
+""", unsafe_allow_html=True)
+
+# The Balloon Button
+col1, col2, col3 = st.columns([1, 1, 1])
+with col2:
+    if st.button("🎈 Click for Birthday Magic! 🎈"):
+        st.balloons()
